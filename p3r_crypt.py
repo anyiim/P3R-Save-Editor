@@ -75,14 +75,19 @@ def main():
         print("%s: %s (%d bytes)" % (src, detect(blob), len(blob)))
         return 0
 
+    kind = detect(blob)
     if mode == "decrypt":
-        assert detect(blob) == "encrypted", "not an encrypted save: " + detect(blob)
+        if kind != "encrypted":
+            raise SystemExit("%s 不是加密存档 (%s)" % (src, kind))
         out = decrypt(blob)
-        assert out[:4] == b"GVAS", "decrypt failed, got %r" % out[:4]
+        if out[:4] != b"GVAS":
+            raise SystemExit("解密失败, 得到 %r" % out[:4])
     elif mode == "encrypt":
-        assert detect(blob) == "gvas", "not a GVAS file: " + detect(blob)
+        if kind != "gvas":
+            raise SystemExit("%s 不是 GVAS 明文 (%s)" % (src, kind))
         out = encrypt(blob)
-        assert int.from_bytes(out[:4], "little") == MAGIC_ENCRYPTED
+        if int.from_bytes(out[:4], "little") != MAGIC_ENCRYPTED:
+            raise SystemExit("加密失败")
     else:
         raise SystemExit("unknown mode: " + mode)
 
