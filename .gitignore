@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 存档文件（体积大且涉及个人数据，不入库）
+*.sav
+*.sav.bak*
+*.raw
+
+# 工作目录
+backup/
+output/
+decrypted/
+
+# 编辑器
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
